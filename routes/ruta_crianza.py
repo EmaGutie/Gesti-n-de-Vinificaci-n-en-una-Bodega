@@ -1,6 +1,6 @@
 from app.app import app
 from Models.Crianza import Crianza
-from config.data import db,engine
+from config.data import db
 from flask import session,request, render_template,redirect,url_for
 @app.route("/crianza",methods=["POST"])
 def cargar():
@@ -40,4 +40,3 @@ def borrar(id):
     db.session.delete(datos)
     db.session.commit()  
     return render_template("mostrar_datos_crianza.html",datos=datos)
-db.metadata.create_all(engine)

@@ -1,6 +1,6 @@
 from app.app import app
 from Models.Fermentacion import Fermentacion
-from config.data import db,engine
+from config.data import db
 from flask import session,request, render_template,redirect,url_for
 @app.route("/fermentacion",methods=["POST"])
 def cargar():
@@ -47,4 +47,3 @@ def borrar(id):
     db.session.delete(datos)
     db.session.commit()  
     return render_template("mostrar_datos_fermentacion.html",datos=datos)
-db.metadata.create_all(engine)

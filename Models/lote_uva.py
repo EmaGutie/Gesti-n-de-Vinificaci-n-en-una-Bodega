@@ -1,4 +1,4 @@
-from config.data import db
+from config.data import db,engine
 class LoteUva(db.Model):
     __tablename__ = 'lotes_uva'
     
@@ -10,4 +10,4 @@ class LoteUva(db.Model):
     fermentacion = db.relationship('Fermentacion', uselist=False, backref='lote')
     crianza = db.relationship('Crianza', uselist=False, backref='lote')
     embotellado = db.relationship('Embotellado', uselist=False, backref='lote')
-db.metadata.create_all()
+db.metadata.create_all(engine)

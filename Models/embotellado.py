@@ -1,4 +1,4 @@
-from config.data import db
+from config.data import db,engine
 class Embotellado(db.Model):
     __tablename__ = 'embotellados'
 
@@ -7,3 +7,4 @@ class Embotellado(db.Model):
     fecha_embotellado = db.Column(db.Date, nullable=False)
     cantidad_botellas = db.Column(db.Integer,nullable=False)
     notas = db.Column(db.Text)
+db.metadata.create_all(engine)

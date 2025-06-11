@@ -1,4 +1,4 @@
-from config.data import db
+from config.data import db,engine
 class VariedadUva(db.Model):
     __tablename__ = 'variedades_uva'
     
@@ -9,3 +9,4 @@ class VariedadUva(db.Model):
 
     # Relaciones
     lotes = db.relationship('LoteUva', backref='variedad', lazy=True)
+db.metadata.create_all(engine)

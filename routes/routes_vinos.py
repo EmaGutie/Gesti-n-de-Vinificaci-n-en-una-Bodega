@@ -1,6 +1,6 @@
 from app.app import app
 from Models.variedades import VariedadUva
-from config.data import db,engine
+from config.data import db
 from flask import session,request,jsonify, render_template,redirect,url_for
 import os
 from werkzeug.utils import secure_filename
@@ -46,7 +46,7 @@ def borrar(id):
     db.session.delete(variedad)
     db.session.commit()
     return render_template("mostrar_datos.html",variedad=variedad)
-db.metadata.create_all(engine)     
+    
           
         
         

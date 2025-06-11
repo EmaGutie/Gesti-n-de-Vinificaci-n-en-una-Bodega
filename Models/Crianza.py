@@ -1,4 +1,4 @@
-from config.data import db
+from config.data import db,engine
 class Crianza(db.Model):
     __tablename__ = 'crianzas'
 
@@ -7,3 +7,4 @@ class Crianza(db.Model):
     tipo_recipiente = db.Column(db.String(100), nullable=False)
     fecha_inicio = db.Column(db.Date, nullable=False)
     observaciones = db.Column(db.Text)
+db.metadata.create_all(engine)
