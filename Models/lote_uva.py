@@ -10,3 +10,4 @@ class LoteUva(db.Model):
     fermentacion = db.relationship('Fermentacion', uselist=False, backref='lote')
     crianza = db.relationship('Crianza', uselist=False, backref='lote')
     embotellado = db.relationship('Embotellado', uselist=False, backref='lote')
+db.metadata.create_all()

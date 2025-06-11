@@ -1,6 +1,6 @@
 from app.app import app
 from Models.embotellado import Embotellado
-from config.data import db
+from config.data import db,engine
 from flask import session,request, render_template,redirect,url_for
 @app.route("/embotellado",methods=["POST"])
 def cargar():
@@ -41,3 +41,4 @@ def borrar(id):
     db.session.commit()  
     return render_template("mostrar_datos.html",datos=datos)
 
+db.metadata.create_all(engine)

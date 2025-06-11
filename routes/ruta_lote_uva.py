@@ -1,6 +1,6 @@
 from app.app import app
 from Models.lote_uva import LoteUva
-from config.data import db
+from config.data import db,engine
 from flask import session,request,jsonify, render_template,redirect,url_for
 import os
 from werkzeug.utils import secure_filename
@@ -39,4 +39,5 @@ def borrar(id):
     db.session.delete(variedad)
     db.session.commit()
     return render_template("mostrar_lote.html",variedad=variedad)
+db.metadata.create_all(engine)
      
