@@ -1,4 +1,4 @@
-from app.app import app
+
 from Models.lote_uva import LoteUva
 from config.data import db
 from flask import session,request,jsonify, render_template,redirect,url_for,Blueprint

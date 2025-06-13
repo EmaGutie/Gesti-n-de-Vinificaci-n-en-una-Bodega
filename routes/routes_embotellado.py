@@ -1,4 +1,4 @@
-from app.app import app
+
 from Models.embotellado import Embotellado
 from config.data import db
 from flask import session,request, render_template,redirect,url_for,Blueprint

@@ -1,11 +1,12 @@
-from app.app import app
+
 from Models.variedades import VariedadUva
 from config.data import db
-from flask import session,request,jsonify, render_template,redirect,url_for
+from flask import session,request,jsonify, render_template,redirect,url_for,Blueprint
 import os
 from werkzeug.utils import secure_filename
+vinos_bp=Blueprint("nuevo")
 
-@app.route("/nuevo",method=["POST"])
+@vinos_bp.route("/nuevo",method=["POST"])
 def nuevos_usuarios():
     if request.method=="POST":
         nombre=request.form["nombre"]
@@ -16,14 +17,14 @@ def nuevos_usuarios():
         db.session.commit()
         return render_template("agregar_usuarios.html")
     return redirect(url_for("mostrar_datos"))
-@app.route("/index",method="GET")
+@vinos_bp.route("/index",method="GET")
 def obtener_registro():
     
     if request.method=="GET":
         registro=VariedadUva.query.get()
        
     return render_template("mostrar_datos.html",registro=registro)
-@app.route("/nuevo/<int:id>",method=["POST","GET"])
+@vinos_bp.route("/nuevo/<int:id>",method=["POST","GET"])
 def  modificar(id):
     
     variedad=VariedadUva.query.get_or_404(id)
@@ -39,8 +40,7 @@ def  modificar(id):
         return redirect(url_for("nuevo"))
     return render_template("mostrar_datos.html",variedad=variedad)
     
-    
-app.route("/nuevo/<int:id>",method=["DELETE"])
+@vinos_bp.route("/nuevo/<int:id>",method=["DELETE"])
 def borrar(id):
     variedad=VariedadUva.query.get_or_404(id)
     db.session.delete(variedad)
