@@ -1,11 +1,11 @@
 from app.app import app
 from Models.lote_uva import LoteUva
 from config.data import db
-from flask import session,request,jsonify, render_template,redirect,url_for
+from flask import session,request,jsonify, render_template,redirect,url_for,Blueprint
 import os
 from werkzeug.utils import secure_filename
-
-@app.route("/nuevo_lote",method=["POST"])
+lote_bp=Blueprint("lote",__name__)
+@lote_bp.route("/nuevo_lote",method=["POST"])
 def nuevos_usuarios():
     if request.method=="POST":
         fecha_recepcion=request.form.get("fecha_recepcion")
@@ -15,14 +15,14 @@ def nuevos_usuarios():
         db.session.commit()
         return redirect(url_for("mostrar_lote"))
     return render_template("agregar_lote.html")
-@app.route("/mostrar_lote",method="GET")
+@lote_bp.route("/mostrar_lote",method="GET")
 def obtener_registro():
     
     if request.method=="GET":
         registro=LoteUva.query.get()
        
     return render_template("mostrar_lote.html",registro=registro)
-@app.route("/nuevo_lote/<int:id>",method=["POST","GET"])
+@lote_bp.route("/nuevo_lote/<int:id>",method=["POST","GET"])
 def  modificar(id):
     
     variedad=LoteUva.query.get_or_404(id)
@@ -33,7 +33,7 @@ def  modificar(id):
     return render_template("mostrar_lote.html",variedad=variedad)
     
     
-@app.route("/nuevo_lote/<int:id>",method=["DELETE"])
+@lote_bp.route("/nuevo_lote/<int:id>",method=["DELETE"])
 def borrar(id):
     variedad=LoteUva.query.get_or_404(id)
     db.session.delete(variedad)

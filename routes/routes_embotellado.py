@@ -1,8 +1,10 @@
 from app.app import app
 from Models.embotellado import Embotellado
 from config.data import db
-from flask import session,request, render_template,redirect,url_for
-@app.route("/embotellado",methods=["POST"])
+from flask import session,request, render_template,redirect,url_for,Blueprint
+embotellado_bp=Blueprint("embotellado",__name__)
+@embotellado_bp.route("/embotellado",methods=["POST"])
+
 def cargar():
     if request.method=="POST":
         fecha_embotellado= request.form.get("fecha_embotellado")
@@ -14,14 +16,14 @@ def cargar():
     return render_template("carga_embotellado.html")
 
 
-@app.route("/obtener", methods=["GET"])
+@embotellado_bp.route("/obtener", methods=["GET"])
 def obtener_datos():
     datos = Embotellado.query.all()
     
 
     return render_template("mostrar_datos.html",datos=datos)
 
-@app.route("/embotellado/<int:id>",methods=["POST","GET"])
+@embotellado_bp.route("/embotellado/<int:id>",methods=["POST","GET"])
 def modificar(id):
     datos=Embotellado.query.get_or_404(id)
     if request.method=="POST":
@@ -32,7 +34,7 @@ def modificar(id):
         return redirect(url_for("carga_embotellado"))
     return render_template("mostrar_datos.html",datos=datos)
 
-@app.route("/embotellado/<int:id>", methods=["DELETE"])
+@embotellado_bp.route("/embotellado/<int:id>", methods=["DELETE"])
 def borrar(id):
     datos = Embotellado.query.get_or_404(id)
     

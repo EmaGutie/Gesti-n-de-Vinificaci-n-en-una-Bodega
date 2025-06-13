@@ -11,7 +11,7 @@ db=SQLAlchemy()
 DATA_BASE_URL= f"mysql+pymysql://{user}:{password}@{host}/{data_base}"    
 engine=create_engine(DATA_BASE_URL)
 try:
-    with engine.connect as conexion:
+    with engine.connect() as conexion:
         print("conexion correcta")
 except Exception as error:
     print(f"error en la conexion {error}")                                                               

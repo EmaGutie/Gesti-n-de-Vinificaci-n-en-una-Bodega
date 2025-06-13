@@ -1,8 +1,9 @@
 from app.app import app
 from Models.Crianza import Crianza
 from config.data import db
-from flask import session,request, render_template,redirect,url_for
-@app.route("/crianza",methods=["POST"])
+from flask import session,request, render_template,redirect,url_for,Blueprint
+crianza_bp=Blueprint("crianza",__name__)
+@crianza_bp.route("/crianza",methods=["POST"])
 def cargar():
     if request.method=="POST":
         tipo_de_recipiente= request.form.get("tipo_de_recipiente")
@@ -14,14 +15,14 @@ def cargar():
     return render_template("carga_crianza.html")
 
 
-@app.route("/obtener_datos_crianza", methods=["GET"])
+@crianza_bp.route("/obtener_datos_crianza", methods=["GET"])
 def obtener_datos():
     datos = Crianza.query.all()
     
 
     return render_template("mostrar_datos_crianza.html",datos=datos)
 
-@app.route("/embotellado/<int:id>",methods=["POST","GET"])
+@crianza_bp.route("/embotellado/<int:id>",methods=["POST","GET"])
 def modificar(id):
     datos=Crianza.query.get_or_404(id)
     if request.method=="POST":
@@ -32,7 +33,7 @@ def modificar(id):
         return redirect(url_for("carga_crianza"))
     return render_template("mostrar_datos_crianza.html",datos=datos)
 
-@app.route("/embotellado/<int:id>", methods=["DELETE"])
+@crianza_bp.route("/embotellado/<int:id>", methods=["DELETE"])
 def borrar(id):
     datos = Crianza.query.get_or_404(id)
     
