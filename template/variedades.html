@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ingreso de Variedades</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #8674eb, #deace5);
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      background-color: #4b0082;
+      padding: 10px 20px;
+      text-align: left;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    nav a {
+      
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 14px 20px;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+    nav li {
+      position: relative;
+    }
+     nav li:hover > .dropdown-content {
+      display: block;
+    }
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    form {
+      background-color: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      color: #555;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus,
+    input[type="file"]:focus {
+      border-color: #74ebd5;
+      outline: none;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <ul>
+    <li><a href="index2.html">&larr; Volver al inicio</a></li>
+    <li><a href="">Fermentación Alcohólica</a></li>
+   <li> <a href="">Crianza/almacenamiento</a></li>
+    <li><a href="">Embotellado</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <form action="/variedades" method="POST" enctype="multipart/form-data">
+      <h2>Ingreso de Variedades</h2>
+
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="origen">Origen:</label>
+      <input type="text" id="origen" name="origen" required>
+
+      <label for="imagen">Imagen:</label>
+      <input type="file" id="imagen" name="imagen" accept="image/*" required>
+
+      <label for="Tanque">Tanque:</label>
+      <input type="text" id="Tanque" name="Tanque" required>
+
+      <input type="submit" value="Enviar">
+    </form>
+  </div>
+
+</body>
+</html>
