@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Viñedos 🍇</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .section {
+            display: none; 
+        }
+        .section.active {
+            display: block;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container min-h-screen flex flex-col">
+        <header class="bg-gradient-to-r from-purple-700 to-indigo-700 text-white p-6 rounded-xl shadow-lg mb-8">
+            <h1 class="text-4xl font-bold text-center mb-4">🍇 Gestión de Viñedos</h1>
+            <nav class="flex justify-center space-x-6">
+                <button class="nav-button bg-white text-purple-700 px-6 py-3 rounded-full font-semibold shadow-md hover:bg-gray-100 transition duration-300 transform hover:scale-105" data-section="home">Inicio</button>
+                <button class="nav-button bg-white text-purple-700 px-6 py-3 rounded-full font-semibold shadow-md hover:bg-gray-100 transition duration-300 transform hover:scale-105" data-section="grape-varieties">Variedades de Uva</button>
+                <button class="nav-button bg-white text-purple-700 px-6 py-3 rounded-full font-semibold shadow-md hover:bg-gray-100 transition duration-300 transform hover:scale-105" data-section="winemaking-process">Control de Proceso</button>
+                <button class="nav-button bg-white text-purple-700 px-6 py-3 rounded-full font-semibold shadow-md hover:bg-gray-100 transition duration-300 transform hover:scale-105" data-section="storage">Almacenamiento</button>
+            </nav>
+        </header>
+
+        <div id="app-messages" class="fixed inset-x-0 top-0 flex justify-center z-50 p-4" style="display: none;">
+            <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-xl" id="message-content"></div>
+        </div>
+
+        <section id="home" class="section active bg-white p-8 rounded-xl shadow-lg flex-grow mb-8">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Bienvenido a la Gestión de Viñedos</h2>
+            <p class="text-lg text-gray-700 leading-relaxed text-center">
+                Aquí podrás registrar y gestionar tus variedades de uva, así como llevar un control detallado de cada etapa del proceso de vinificación.
+                Utiliza la barra de navegación superior para acceder a las diferentes funcionalidades.
+            </p>
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-purple-100 p-6 rounded-lg shadow-md text-center">
+                    <p class="text-xl font-medium text-purple-800 mb-2">Variedades de Uva</p>
+                    <p class="text-gray-600">Registra y consulta tus tipos de uva.</p>
+                </div>
+                <div class="bg-blue-100 p-6 rounded-lg shadow-md text-center">
+                    <p class="text-xl font-medium text-blue-800 mb-2">Recepción de Uva</p>
+                    <p class="text-gray-600">Documenta la llegada de la cosecha.</p>
+                </div>
+                <div class="bg-yellow-100 p-6 rounded-lg shadow-md text-center">
+                    <p class="text-xl font-medium text-yellow-800 mb-2">Fermentación</p>
+                    <p class="text-gray-600">Controla el proceso de fermentación.</p>
+                </div>
+                <div class="bg-green-100 p-6 rounded-lg shadow-md text-center">
+                    <p class="text-xl font-medium text-green-800 mb-2">Almacenamiento</p>
+                    <p class="text-gray-600">Gestiona y busca tus vinos en crianza.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="grape-varieties" class="section bg-white p-8 rounded-xl shadow-lg flex-grow mb-8">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">🍇 Gestión de Variedades de Uva</h2>
+
+            <div class="bg-gray-50 p-6 rounded-lg shadow-md mb-8">
+                <h3 class="text-2xl font-medium text-gray-700 mb-4">Registrar Nueva Variedad</h3>
+                <form id="grape-variety-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="variety-name" class="block text-sm font-medium text-gray-700">Nombre:</label>
+                        <input type="text" id="variety-name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="variety-origin" class="block text-sm font-medium text-gray-700">Origen:</label>
+                        <input type="text" id="variety-origin" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="variety-photo" class="block text-sm font-medium text-gray-700">Foto:</label>
+                        <input type="file" id="variety-photo" accept="image/*" class="mt-1 block w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100">
+                    </div>
+                    <div class="md:col-span-2 text-right">
+                        <button type="submit" class="bg-purple-600 text-white px-6 py-3 rounded-full font-semibold shadow-md hover:bg-purple-700 transition duration-300 transform hover:scale-105">Registrar Variedad</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-medium text-gray-700 mb-4">Variedades Registradas</h3>
+                <div id="grape-varieties-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
+                <p id="no-grape-varieties" class="text-gray-500 text-center mt-4" style="display: none;">No hay variedades de uva registradas aún.</p>
+            </div>
+        </section>
+
+        <section id="winemaking-process" class="section bg-white p-8 rounded-xl shadow-lg flex-grow mb-8">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">🧪 Control del Proceso de Vinificación</h2>
+
+            <div class="bg-gray-50 p-6 rounded-lg shadow-md mb-8">
+                <h3 class="text-2xl font-medium text-gray-700 mb-4">Registrar Datos de Etapa</h3>
+                <label for="process-stage-select" class="block text-sm font-medium text-gray-700 mb-2">Selecciona la Etapa:</label>
+                <select id="process-stage-select" class="block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-4 focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="">-- Seleccionar --</option>
+                    <option value="reception">1. Recepción de Uva</option>
+                    <option value="fermentation">2. Fermentación Alcohólica</option>
+                    <option value="aging">3. Crianza / Almacenamiento</option>
+                    <option value="bottling">4. Embotellado</option>
+                </select>
+
+                <div id="process-forms-container">
+                    <form id="reception-form" class="process-form hidden">
+                        <h4 class="text-xl font-medium text-gray-700 mb-3">Recepción de Uva</h4>
+                        <label for="reception-date" class="block text-sm font-medium text-gray-700">Fecha:</label>
+                        <input type="date" id="reception-date" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3">
+                        <label for="reception-weight" class="block text-sm font-medium text-gray-700">Peso (kg):</label>
+                        <input type="number" id="reception-weight" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3">
+                        <label for="reception-notes" class="block text-sm font-medium text-gray-700">Notas:</label>
+                        <textarea id="reception-notes" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3"></textarea>
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105">Registrar Recepción</button>
+                    </form>
+
+                    <form id="fermentation-form" class="process-form hidden">
+                        <h4 class="text-xl font-medium text-gray-700 mb-3">Fermentación Alcohólica</h4>
+                        <label for="fermentation-start-date" class="block text-sm font-medium text-gray-700">Fecha Inicio:</label>
+                        <input type="date" id="fermentation-start-date" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3">
+                        <label for="fermentation-temp" class="block text-sm font-medium text-gray-700">Temperatura (°C):</label>
+                        <input type="number" id="fermentation-temp" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3">
+                        <label for="fermentation-yeast" class="block text-sm font-medium text-gray-700">Cepa de Levadura:</label>
+                        <input type="text" id="fermentation-yeast" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3">
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105">Registrar Fermentación</button>
+                    </form>
+
+                    <form id="aging-form" class="process-form hidden">
+                        <h4 class="text-xl font-medium text-gray-700 mb-3">Crianza / Almacenamiento</h4>
+                        <label for="aging-start-date" class="block text-sm font-medium text-gray-700">Fecha Inicio:</label>
+                        <input type="date" id="aging-start-date" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3">
+                        <label for="aging-variety" class="block text-sm font-medium text-gray-700">Variedad de Uva:</label>
+                        <select id="aging-variety" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3">
+                            <option value="">-- Selecciona Variedad --</option>
+                            </select>
+                        <label for="aging-container-type" class="block text-sm font-medium text-gray-700">Tipo de Recipiente:</label>
+                        <select id="aging-container-type" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3">
+                            <option value="">-- Selecciona Tipo --</option>
+                            <option value="barrica_roble">Barrica de Roble</option>
+                            <option value="tanque_acero">Tanque de Acero Inoxidable</option>
+                            <option value="cemento">Tanque de Cemento</option>
+                        </select>
+                        <label for="aging-notes" class="block text-sm font-medium text-gray-700">Notas:</label>
+                        <textarea id="aging-notes" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3"></textarea>
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105">Registrar Crianza</button>
+                    </form>
+
+                    <form id="bottling-form" class="process-form hidden">
+                        <h4 class="text-xl font-medium text-gray-700 mb-3">Embotellado</h4>
+                        <label for="bottling-date" class="block text-sm font-medium text-gray-700">Fecha:</label>
+                        <input type="date" id="bottling-date" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3">
+                        <label for="bottling-count" class="block text-sm font-medium text-gray-700">Cantidad de Botellas:</label>
+                        <input type="number" id="bottling-count" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3">
+                        <label for="bottling-notes" class="block text-sm font-medium text-gray-700">Notas:</label>
+                        <textarea id="bottling-notes" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 mb-3"></textarea>
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105">Registrar Embotellado</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-medium text-gray-700 mb-4">Registros del Proceso</h3>
+                <div id="process-records-list" class="space-y-4">
+                    </div>
+                <p id="no-process-records" class="text-gray-500 text-center mt-4" style="display: none;">No hay registros de proceso aún.</p>
+            </div>
+        </section>
+
+        <section id="storage" class="section bg-white p-8 rounded-xl shadow-lg flex-grow mb-8">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">📦 Almacenamiento de Vinos</h2>
+
+            <div class="bg-gray-50 p-6 rounded-lg shadow-md mb-8">
+                <h3 class="text-2xl font-medium text-gray-700 mb-4">Buscador de Vinos Almacenados</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="search-variety" class="block text-sm font-medium text-gray-700">Variedad de Uva:</label>
+                        <select id="search-variety" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">Todas las Variedades</option>
+                            </select>
+                    </div>
+                    <div>
+                        <label for="search-container-type" class="block text-sm font-medium text-gray-700">Tipo de Recipiente:</label>
+                        <select id="search-container-type" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">Todos los Recipientes</option>
+                            <option value="barrica_roble">Barrica de Roble</option>
+                            <option value="tanque_acero">Tanque de Acero Inoxidable</option>
+                            <option value="cemento">Tanque de Cemento</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button id="apply-search" class="bg-green-600 text-white px-6 py-3 rounded-full font-semibold shadow-md hover:bg-green-700 transition duration-300 transform hover:scale-105 w-full">Aplicar Filtros</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-medium text-gray-700 mb-4">Vinos en Almacenamiento</h3>
+                <div id="stored-wines-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
+                <p id="no-stored-wines" class="text-gray-500 text-center mt-4" style="display: none;">No hay vinos en almacenamiento que coincidan con los filtros.</p>
+            </div>
+        </section>
+
+        <footer class="bg-gray-800 text-white text-center p-4 rounded-xl shadow-lg mt-8">
+            <p class="mt-2 text-sm">Participantes: Lisandro Cottini, Leonardo Echevarria, Thomas Romero, Emanuel Gutierrez</p>
+        </footer>
+    </div>
+
+    <script>
+        let grapeVarieties = [];
+        let processRecords = {
+            reception: [],
+            fermentation: [],
+            aging: [],
+            bottling: []
+        };
+        let storedWines = [];
+
+        const navButtons = document.querySelectorAll('.nav-button');
+        const sections = document.querySelectorAll('.section');
+        const appMessages = document.getElementById('app-messages');
+        const messageContent = document.getElementById('message-content');
+
+        const grapeVarietyForm = document.getElementById('grape-variety-form');
+        const varietyNameInput = document.getElementById('variety-name');
+        const varietyOriginInput = document.getElementById('variety-origin');
+        const varietyPhotoInput = document.getElementById('variety-photo');
+        const grapeVarietiesList = document.getElementById('grape-varieties-list');
+        const noGrapeVarietiesMessage = document.getElementById('no-grape-varieties');
+
+        const processStageSelect = document.getElementById('process-stage-select');
+        const processForms = document.querySelectorAll('.process-form');
+        const processRecordsList = document.getElementById('process-records-list');
+        const noProcessRecordsMessage = document.getElementById('no-process-records');
+
+        
+        const receptionForm = document.getElementById('reception-form');
+        const fermentationForm = document.getElementById('fermentation-form');
+        const agingForm = document.getElementById('aging-form');
+        const bottlingForm = document.getElementById('bottling-form');
+
+       
+        const receptionDateInput = document.getElementById('reception-date');
+        const receptionWeightInput = document.getElementById('reception-weight');
+        const receptionNotesInput = document.getElementById('reception-notes');
+
+        
+        const fermentationStartDateInput = document.getElementById('fermentation-start-date');
+        const fermentationTempInput = document.getElementById('fermentation-temp');
+        const fermentationYeastInput = document.getElementById('fermentation-yeast');
+
+        
+        const agingStartDateInput = document.getElementById('aging-start-date');
+        const agingVarietySelect = document.getElementById('aging-variety');
+        const agingContainerTypeSelect = document.getElementById('aging-container-type');
+        const agingNotesInput = document.getElementById('aging-notes');
+
+        const bottlingDateInput = document.getElementById('bottling-date');
+        const bottlingCountInput = document.getElementById('bottling-count');
+        const bottlingNotesInput = document.getElementById('bottling-notes');
+
+        const searchVarietySelect = document.getElementById('search-variety');
+        const searchContainerTypeSelect = document.getElementById('search-container-type');
+        const applySearchButton = document.getElementById('apply-search');
+        const storedWinesList = document.getElementById('stored-wines-list');
+        const noStoredWinesMessage = document.getElementById('no-stored-wines');
+
+
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0,
+                    v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function showAppMessage(message, type = 'success') {
+            messageContent.textContent = message;
+            appMessages.style.display = 'flex';
+            if (type === 'success') {
+                messageContent.className = 'bg-green-500 text-white px-6 py-3 rounded-lg shadow-xl';
+            } else if (type === 'error') {
+                messageContent.className = 'bg-red-500 text-white px-6 py-3 rounded-lg shadow-xl';
+            } else {
+                messageContent.className = 'bg-gray-700 text-white px-6 py-3 rounded-lg shadow-xl';
+            }
+
+            setTimeout(() => {
+                appMessages.style.display = 'none';
+            }, 3000);
+        }
+
+        function showSection(sectionId) {
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            if (sectionId === 'winemaking-process') {
+                populateVarietySelects();
+            }
+            if (sectionId === 'storage') {
+                populateVarietySelectsForSearch();
+                renderStoredWines(); 
+            }
+        }
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const sectionId = button.dataset.section;
+                showSection(sectionId);
+            });
+        });
+
+        function renderGrapeVarieties() {
+            grapeVarietiesList.innerHTML = ''; 
+
+            if (grapeVarieties.length === 0) {
+                noGrapeVarietiesMessage.style.display = 'block';
+                return;
+            } else {
+                noGrapeVarietiesMessage.style.display = 'none';
+            }
+
+            grapeVarieties.forEach(variety => {
+                const varietyCard = `
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                        <img src="${variety.foto || 'https://placehold.co/400x250/E0E0E0/333333?text=Sin+Imagen'}"
+                             alt="Foto de ${variety.nombre}"
+                             class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">${variety.nombre}</h4>
+                            <p class="text-gray-600 text-sm mb-1"><strong>ID:</strong> ${variety.id}</p>
+                            <p class="text-gray-600 text-sm"><strong>Origen:</strong> ${variety.origen}</p>
+                        </div>
+                    </div>
+                `;
+                grapeVarietiesList.insertAdjacentHTML('beforeend', varietyCard);
+            });
+        }
+
+        grapeVarietyForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const name = varietyNameInput.value.trim();
+            const origin = varietyOriginInput.value.trim();
+            const photoFile = varietyPhotoInput.files[0];
+
+            if (!name || !origin) {
+                showAppMessage('Por favor, completa todos los campos.', 'error');
+                return;
+            }
+
+            let photoBase64 = '';
+            if (photoFile) {
+                try {
+                    photoBase64 = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = error => reject(error);
+                        reader.readAsDataURL(photoFile);
+                    });
+                } catch (error) {
+                    showAppMessage('Error al leer la imagen. Inténtalo de nuevo.', 'error');
+                    console.error('Error reading file:', error);
+                    return;
+                }
+            }
+
+            const newVariety = {
+                id: generateUUID(),
+                nombre: name,
+                origen: origin,
+                foto: photoBase64
+            };
+
+            grapeVarieties.push(newVariety);
+            showAppMessage('Variedad de uva registrada con éxito.');
+
+            grapeVarietyForm.reset();
+            renderGrapeVarieties(); 
+        });
+
+        function populateVarietySelects() {
+            agingVarietySelect.innerHTML = '<option value="">-- Selecciona Variedad --</option>';
+            searchVarietySelect.innerHTML = '<option value="">Todas las Variedades</option>';
+
+            grapeVarieties.forEach(variety => {
+                const option = `<option value="${variety.nombre}">${variety.nombre}</option>`;
+                agingVarietySelect.insertAdjacentHTML('beforeend', option);
+                searchVarietySelect.insertAdjacentHTML('beforeend', option);
+            });
+        }
+
+        processStageSelect.addEventListener('change', () => {
+            const selectedStage = processStageSelect.value;
+            processForms.forEach(form => {
+                form.classList.add('hidden'); 
+            });
+
+            if (selectedStage) {
+                document.getElementById(`${selectedStage}-form`).classList.remove('hidden'); 
+            }
+        });
+
+        function renderProcessRecords() {
+            processRecordsList.innerHTML = '';
+            let hasRecords = false;
+
+            for (const stage in processRecords) {
+                if (processRecords[stage].length > 0) {
+                    hasRecords = true;
+                    const stageName = {
+                        reception: 'Recepción de Uva',
+                        fermentation: 'Fermentación Alcohólica',
+                        aging: 'Crianza / Almacenamiento',
+                        bottling: 'Embotellado'
+                    }[stage] || stage;
+
+                    const stageTitle = `<h4 class="text-xl font-medium text-gray-700 mt-6 mb-2 border-b pb-2">${stageName}</h4>`;
+                    processRecordsList.insertAdjacentHTML('beforeend', stageTitle);
+
+                    processRecords[stage].forEach(record => {
+                        let details = '';
+                        if (stage === 'reception') {
+                            details = `Fecha: ${record.date}, Peso: ${record.weight} kg, Notas: ${record.notes}`;
+                        } else if (stage === 'fermentation') {
+                            details = `Fecha Inicio: ${record.startDate}, Temp: ${record.temp}°C, Levadura: ${record.yeast}`;
+                        } else if (stage === 'aging') {
+                            details = `Fecha Inicio: ${record.startDate}, Variedad: ${record.variety}, Recipiente: ${record.containerType}, Notas: ${record.notes}`;
+                        } else if (stage === 'bottling') {
+                            details = `Fecha: ${record.date}, Botellas: ${record.count}, Notas: ${record.notes}`;
+                        }
+
+                        const recordHtml = `
+                            <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                                <p class="text-gray-700">${details}</p>
+                            </div>
+                        `;
+                        processRecordsList.insertAdjacentHTML('beforeend', recordHtml);
+                    });
+                }
+            }
+
+            if (!hasRecords) {
+                noProcessRecordsMessage.style.display = 'block';
+            } else {
+                noProcessRecordsMessage.style.display = 'none';
+            }
+        }
+
+        receptionForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const date = receptionDateInput.value;
+            const weight = receptionWeightInput.value;
+            const notes = receptionNotesInput.value.trim();
+
+            if (!date || !weight) {
+                showAppMessage('Por favor, completa la fecha y el peso de recepción.', 'error');
+                return;
+            }
+
+            const newReception = { date, weight: parseFloat(weight), notes };
+            processRecords.reception.push(newReception);
+            showAppMessage('Registro de recepción guardado.');
+            receptionForm.reset();
+            renderProcessRecords();
+        });
+
+        fermentationForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const startDate = fermentationStartDateInput.value;
+            const temp = fermentationTempInput.value;
+            const yeast = fermentationYeastInput.value.trim();
+
+            if (!startDate || !temp || !yeast) {
+                showAppMessage('Por favor, completa todos los campos de fermentación.', 'error');
+                return;
+            }
+
+            const newFermentation = { startDate, temp: parseFloat(temp), yeast };
+            processRecords.fermentation.push(newFermentation);
+            showAppMessage('Registro de fermentación guardado.');
+            fermentationForm.reset();
+            renderProcessRecords();
+        });
+
+        agingForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const startDate = agingStartDateInput.value;
+            const variety = agingVarietySelect.value;
+            const containerType = agingContainerTypeSelect.value;
+            const notes = agingNotesInput.value.trim();
+
+            if (!startDate || !variety || !containerType) {
+                showAppMessage('Por favor, completa todos los campos de crianza.', 'error');
+                return;
+            }
+
+            const newAging = { id: generateUUID(), startDate, variety, containerType, notes };
+            processRecords.aging.push(newAging);
+            storedWines.push(newAging); 
+            showAppMessage('Registro de crianza/almacenamiento guardado.');
+            agingForm.reset();
+            renderProcessRecords();
+            renderStoredWines(); 
+        });
+
+        bottlingForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const date = bottlingDateInput.value;
+            const count = bottlingCountInput.value;
+            const notes = bottlingNotesInput.value.trim();
+
+            if (!date || !count) {
+                showAppMessage('Por favor, completa la fecha y cantidad de botellas.', 'error');
+                return;
+            }
+
+            const newBottling = { date, count: parseInt(count), notes };
+            processRecords.bottling.push(newBottling);
+            showAppMessage('Registro de embotellado guardado.');
+            bottlingForm.reset();
+            renderProcessRecords();
+        });
+
+        function populateVarietySelectsForSearch() {
+            populateVarietySelects();
+        }
+        function renderStoredWines() {
+            storedWinesList.innerHTML = '';
+            const selectedVariety = searchVarietySelect.value;
+            const selectedContainerType = searchContainerTypeSelect.value;
+
+            const filteredWines = storedWines.filter(wine => {
+                const matchesVariety = selectedVariety ? wine.variety === selectedVariety : true;
+                const matchesContainerType = selectedContainerType ? wine.containerType === selectedContainerType : true;
+                return matchesVariety && matchesContainerType;
+            });
+
+            if (filteredWines.length === 0) {
+                noStoredWinesMessage.style.display = 'block';
+                return;
+            } else {
+                noStoredWinesMessage.style.display = 'none';
+            }
+
+            filteredWines.forEach(wine => {
+                const wineCard = `
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                        <div class="p-4">
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">${wine.variety}</h4>
+                            <p class="text-gray-600 text-sm mb-1"><strong>ID:</strong> ${wine.id}</p>
+                            <p class="text-gray-600 text-sm mb-1"><strong>Inicio Crianza:</strong> ${wine.startDate}</p>
+                            <p class="text-gray-600 text-sm mb-1"><strong>Recipiente:</strong> ${wine.containerType === 'barrica_roble' ? 'Barrica de Roble' : wine.containerType === 'tanque_acero' ? 'Tanque de Acero Inoxidable' : 'Tanque de Cemento'}</p>
+                            <p class="text-gray-600 text-sm"><strong>Notas:</strong> ${wine.notes || 'N/A'}</p>
+                        </div>
+                    </div>
+                `;
+                storedWinesList.insertAdjacentHTML('beforeend', wineCard);
+            });
+        }
+        applySearchButton.addEventListener('click', renderStoredWines);
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('home'); 
+            renderGrapeVarieties(); 
+            renderProcessRecords(); 
+            renderStoredWines(); 
+        });
+    </script>
+</body>
+</html>
